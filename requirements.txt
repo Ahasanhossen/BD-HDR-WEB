@@ -1,0 +1,16 @@
+numpy==1.21.4
+pickle-mixin==1.0.2
+streamlit==1.2.0
+streamlit-option-menu==0.3.2
+gunicorn
+flask
+opencv-python
+tensorflow
+keras
+pyasn1
+scikit-learn
+preprocess
+jinja2
+scipy
+markupsafe
+werkzeug
