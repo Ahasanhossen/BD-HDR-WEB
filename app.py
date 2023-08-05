@@ -52,6 +52,8 @@ def main():
     # How to Use the System
     st.markdown("### How to Use the System:")
     st.markdown("- Upload an image of a hand-written Bengali district name.")
+    st.markdown("- Or draw a Bengali district name on the whiteboard.")
+    st.markdown("- To adjust the drawing stroke width, you can find an option on the left sidebar.")
     st.markdown("- Click the \"Predict\" button to get the district name prediction.")
     st.write("To help you understand the system better, we have provided some example images on the left.You can easily interact with the system by dragging and dropping these example images or by uploading your own hand-written district name image.")
     
@@ -65,7 +67,8 @@ def main():
     for i, image_path in enumerate(example_image_paths):
         image = cv2.imread(image_path)
         st.sidebar.image(image, caption=f"Example {i+1}", use_column_width=False, width=150)
-        
+    # drawing stroke width    
+    stroke_width = st.sidebar.slider("Stroke width: ", 1, 20, 6)    
 
     # input field 
     col1, col2 = st.columns(2)
@@ -76,7 +79,7 @@ def main():
         st.markdown("<h3 style='color: #3366cc;'><center>Draw District Name:</center></h3>", unsafe_allow_html=True)
         drawing = st_canvas(
         fill_color="rgba(255, 255, 255, 1)",
-        stroke_width=6,
+        stroke_width=stroke_width,
         stroke_color="black",
         background_color="white",
         height=100,
@@ -148,7 +151,7 @@ def main():
         
     st.write("We hope you enjoy using our Hand-Written Bengali District Name Recognition System! Feel free to explore the example images, test the model with your own inputs, and experience the efficiency of our Deep Learning model.")
     st.write("Please note that this system is intended for educational and demonstration purposes. If you have any questions or feedback, don't hesitate to reach out to us. Happy predicting!")
-    st.write("With this system, you can easily predict the district name of hand-written Bengali district name from images. It utilizes a powerful Deep Learning model that has been trained on a diverse dataset of hand-written district names to provide accurate predictions.")
+    
     
     
 
