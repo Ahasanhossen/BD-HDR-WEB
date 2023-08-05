@@ -62,10 +62,10 @@ div.css-1on073z.e1b2p2ww7 {
 
 /* Board */
 iframe {
+    position: relative;
     border: 0px;
-    width: 500px;
-    padding-left:100px; 
-    padding-right: 100px;
+    max-width: 300px;
+   
 }
 
 
