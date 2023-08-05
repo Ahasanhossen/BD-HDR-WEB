@@ -1,8 +1,8 @@
-numpy==1.21.4
-pickle-mixin==1.0.2
-streamlit==1.2.0
+numpy
+pickle-mixin
+streamlit
 streamlit_drawable_canvas
-streamlit-option-menu==0.3.2
+streamlit-option-menu
 opencv-python
 tensorflow
 keras
