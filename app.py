@@ -21,6 +21,16 @@ lb = pickle.load(open("label_binarizer.pkl", "rb"))
 
 # Streamlit app 
 def main():
+    st.markdown(
+    """
+    <style>
+        section[data-testid="stSidebar"] {
+            width: 244px !important; # Set the width to your desired value
+        }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
     # Top bar with blue background and white text
     st.markdown("""
