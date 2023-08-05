@@ -24,7 +24,7 @@ def main():
 
     # Top bar with blue background and white text
     st.markdown("""
-    <nav class="navbar sticky-top  navbar-expand-lg navbar-dark" style="background-color: #3498DB;">
+    <nav class="navbar fixed-top  navbar-expand-lg navbar-dark" style="background-color: #3498DB;">
         <a class="navbar-brand" style="color: white;text-align: center;">BD-HDR</a>
     </nav>
     """, unsafe_allow_html=True)
