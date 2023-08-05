@@ -5,31 +5,37 @@ import pickle
 from tensorflow.keras.models import load_model
 from preprocess import preprocess_image
 import base64
+from streamlit_drawable_canvas import st_canvas
 
+ # Set the page title and favicon
+st.set_page_config(page_title="Hand-Written Image Recognition", page_icon="plot_words.png", layout="wide",initial_sidebar_state="expanded")
+st.markdown('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">', unsafe_allow_html=True)
 
+# open css file
+with open('style.css') as f:
+    st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
-# Load the trained CNN model .
+# Load the trained CNN model 
 model = load_model("cnn_model.h5", compile=False)
 lb = pickle.load(open("label_binarizer.pkl", "rb"))
 
 # Streamlit app 
 def main():
 
-
-# Your Streamlit app code here
-
-    # Set the page title and favicon
-    st.set_page_config(page_title="Hand-Written Image Recognition", page_icon="✏️", layout="wide",initial_sidebar_state="expanded")
-    st.markdown('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">', unsafe_allow_html=True)
-
     # Top bar with blue background and white text
     st.markdown("""
-    <nav class="navbar fixed-top  navbar-expand-lg navbar-dark" style="background-color: #3498DB;">
-        <a class="navbar-brand" style="color: white;text-align: center;">BD-HDR</a>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark" style="background-color: #3498DB;">
+         <a class="navbar-brand" style="color: white;text-align: center;">BD-HDR</a>
     </nav>
     """, unsafe_allow_html=True)
-
-    # # Introduction and instructions
+    
+    st.sidebar.markdown("""
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark" style="background-color: #3498DB;top:2px;padding:7px;width:244px;">
+         <a class="navbar-brand" style="color: white;text-align: center; ">BD-HDR</a>
+    </nav>
+    """, unsafe_allow_html=True)
+  
+    # Introduction and instructions
     st.write("Welcome to our Hand-Written Bengali District Name Recognition System!")
     st.write("With this system, you can easily predict the district name of hand-written Bengali district name from images. It utilizes a powerful Deep Learning model that has been trained on a diverse dataset of hand-written district names to provide accurate predictions.")
     
@@ -51,46 +57,89 @@ def main():
         st.sidebar.image(image, caption=f"Example {i+1}", use_column_width=False, width=150)
         
 
-    #  input field 
-    st.markdown("<hr style='border-top: 3px dotted green;'>", unsafe_allow_html=True)
-    st.markdown("<hr style='border-top: 3px dotted green;'>", unsafe_allow_html=True)
-    # st.markdown("<hr style='border-top: 10px dashed yellow;'>", unsafe_allow_html=True)
-    col11, col22 =st.columns(2)
-    
-    with st.form(key='my_form'):
-        st.markdown("<h3 style='color: #3366cc;'>Upload an Image:</h3>", unsafe_allow_html=True)
-        file = st.file_uploader("", type=["jpg", "jpeg", "png", "gif"], key="fileUploader", help="Accepted formats: JPG, JPEG, PNG, GIF")
-        submit_button = st.form_submit_button(label='Predict')
-
-        if submit_button and file is not None:
-            # Read the image and preprocess it
-            image = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_COLOR)
+    # input field 
+    col1, col2 = st.columns(2)
+    # From for predict draw word
+    with col1:
+      with st.form('Form1',clear_on_submit=True):
+        # Free drawing board
+        st.markdown("<h3 style='color: #3366cc;'><center>Draw District Name:</center></h3>", unsafe_allow_html=True)
+        drawing = st_canvas(
+        fill_color="rgba(255, 255, 255, 1)",
+        stroke_width=6,
+        stroke_color="black",
+        background_color="white",
+        height=100,
+        width=300,
+        key="full_app",
+                          )
+        submitted2 = st.form_submit_button('predict')
+     
+        if submitted2 and drawing is not None:
+            image=np.array(drawing.image_data)
             preprocessed_image = preprocess_image(image)
             
             # Make predictions using the loaded model
             prediction = model.predict(preprocessed_image)
             predicted_label = lb.inverse_transform(prediction)[0]
-
-            # Convert the image to base64 format for displaying it on the web page
-            _, img_buffer = cv2.imencode(".jpg", image)
-            image_base64 = base64.b64encode(img_buffer).decode("utf-8")
-
-            col1, col3 = st.columns(2)
-
-            # Display the results
-            col1.markdown("<h3 style='color: #3366cc;'>Given Image:</h3>", unsafe_allow_html=True)
-            col1.image(image, caption="Input Image", use_column_width=False, width=200)
+            confidence = prediction.max()
         
-            # The model predicts the character as:
-            col3.markdown(" <h3 style='color: #3366cc;'>Prediction:</h3>", unsafe_allow_html=True)
-            col3.markdown(f"<h3 style='color: green;'>Predicted District: <span style='color: red;'>{predicted_label}</span></h3>", unsafe_allow_html=True)
+            if confidence>0.9:
+                col1, col3 = st.columns(2)
+                # Display the input image
+                col1.markdown("<h3 style='color: #3366cc;'>Given Image:</h3>", unsafe_allow_html=True)
+                col1.image(image, caption="Input Image", use_column_width=False, width=200)
+                # The model predicts 
+                col3.markdown(" <h3 style='color: #3366cc;'>Prediction:</h3>", unsafe_allow_html=True)
+                col3.markdown(f"<h3 style='color: green;'>Predicted District: <span style='color: red;'>{predicted_label}</span></h3>", unsafe_allow_html=True)
+                # Max probability
+                # st.markdown(f"<p>Confidence Level: {confidence:.2f}</p>", unsafe_allow_html=True)
+            else:
+                 st.warning('Please Input Appropriate Word', icon="⚠️")
+    # From for predict input image
+    with col2:
+     with st.form('Form2',clear_on_submit=True):
+       # Image Input field
+       st.markdown("<h3 style='color: #3366cc;'><center>Upload an Image:</center></h3>", unsafe_allow_html=True)
+       file = st.file_uploader("", type=["jpg", "jpeg", "png", "gif"], key="fileUploader", help="Accepted formats: JPG, JPEG, PNG, GIF")
+       submitted1 = st.form_submit_button('Predict')
+       if submitted1:
+        if file is not None:
+            # If the user uploaded an image, read and preprocess it
+             image = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_COLOR)
+             preprocessed_image = preprocess_image(image)
+            
+            # Make predictions using the loaded model
+             prediction = model.predict(preprocessed_image)
+             predicted_label = lb.inverse_transform(prediction)[0]
+             confidence = prediction.max()
+             if confidence>0.9:
+                col1, col3 = st.columns(2)
+                
+                # Display the results
+                col1.markdown("<h3 style='color: #3366cc;'>Given Image:</h3>", unsafe_allow_html=True)
+                col1.image(image, caption="Input Image", use_column_width=False, width=200)
+                
+                # The model predicts the character as:
+                col3.markdown(" <h3 style='color: #3366cc;'>Prediction:</h3>", unsafe_allow_html=True)
+                col3.markdown(f"<h3 style='color: green;'>Predicted District: <span style='color: red;'>{predicted_label}</span></h3>", unsafe_allow_html=True)
+                
+        
+             else:
+                 st.warning('Please Input Appropriate Image', icon="⚠️")
+        else:
+            st.warning('Please Input an Image', icon="⚠️")
+            
+        
+            
 
-    st.markdown("<hr style='border-top: 3px dotted green;'>", unsafe_allow_html=True)
-    st.markdown("<hr style='border-top: 3px dotted green;'>", unsafe_allow_html=True)
+    
+
+        
     st.write("We hope you enjoy using our Hand-Written Bengali District Name Recognition System! Feel free to explore the example images, test the model with your own inputs, and experience the efficiency of our Deep Learning model.")
     st.write("Please note that this system is intended for educational and demonstration purposes. If you have any questions or feedback, don't hesitate to reach out to us. Happy predicting!")
     st.write("With this system, you can easily predict the district name of hand-written Bengali district name from images. It utilizes a powerful Deep Learning model that has been trained on a diverse dataset of hand-written district names to provide accurate predictions.")
-
+    
     
 
     # Copyright text in bottom middle
