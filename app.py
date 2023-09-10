@@ -53,8 +53,8 @@ def main():
 
     # How to Use the System
     st.markdown("### How to Use the System:")
-    st.markdown("- Upload an image of a hand-written Bengali district name.")
-    st.markdown("- Or draw a Bengali district name on the whiteboard.")
+    st.markdown(
+        "- Upload an image of a hand-written Bengali district name. Or draw a Bengali district name on the whiteboard.")
     st.markdown(
         "- To adjust the drawing stroke width, you can find an option on the left sidebar.")
     st.markdown(
@@ -65,9 +65,10 @@ def main():
     st.sidebar.markdown(
         "<h3 style='color: #3366cc;'>Example Images:</h3>", unsafe_allow_html=True)
     example_image_paths = [
-        "word_9_AH_16.jpg",
-        "word_13_AH_18.jpg",
-        "word_28_AH_18.jpg"
+        "figures/word_62_AH_19.jpg",
+        "figures/word_6_AC_01.jpg",
+        "figures/word_13_AB_01.jpg",
+        "figures/word_28_AH_18.jpg"
     ]
     for i, image_path in enumerate(example_image_paths):
         image = cv2.imread(image_path)
@@ -81,10 +82,10 @@ def main():
     col1, col2 = st.columns(2)
     # From for predict draw word
     with col1:
-        with st.form('Form1', clear_on_submit=True):
+        with st.form('Form1', clear_on_submit=False):
             # Free drawing board
             st.markdown(
-                "<h3 style='color: #3366cc;place-items: center;'><center>Draw District Name:</center></h3>", unsafe_allow_html=True)
+                "<h3 style='color: #3366cc;'>Draw District Name:</h3>", unsafe_allow_html=True)
             # st.title("Canvas")
             drawing = st_canvas(
                 fill_color="rgba(255, 255, 255, 1)",
@@ -92,7 +93,7 @@ def main():
                 stroke_color="black",
                 background_color="white",
                 height=100,
-                # width=300,
+                width=300,
                 key="full_app",
             )
             submitted2 = st.form_submit_button('Predict')
@@ -105,17 +106,17 @@ def main():
                 predicted_label = lb.inverse_transform(prediction)[0]
                 confidence = prediction.max()
                 if confidence > 0.9:
-                    col1, col3 = st.columns(2)
+                    col1_1, col1_2 = st.columns(2)
                     # Display the input image
-                    col1.markdown(
-                        "<p style='color: #3366cc;'>Given Image:</p>", unsafe_allow_html=True)
-                    col1.image(image, caption="Input Image",
-                               use_column_width=False, width=200)
+                    col1_1.markdown(
+                        "<p style='color: #3366cc;'>Input Image:</p>", unsafe_allow_html=True)
+                    col1_1.image(image, caption="",
+                                 use_column_width=True)
                     # The model predicts
-                    col3.markdown(
+                    col1_2.markdown(
                         f"<p style='color: green;'>Predicted District:</p>", unsafe_allow_html=True)
-                    col3.markdown(
-                        f"<span style='color: red;'>{predicted_label}</span>", unsafe_allow_html=True)
+                    col1_2.markdown(
+                        f"<span style='color: red;font-size: 3rem;'>{predicted_label}</span>", unsafe_allow_html=True)
                     # Max probability
                     # st.markdown(f"<p>Confidence Level: {confidence:.2f}</p>", unsafe_allow_html=True)
                 else:
@@ -123,7 +124,7 @@ def main():
 
     # From for predict input image
     with col2:
-        with st.form('Form2', clear_on_submit=True):
+        with st.form('Form2', clear_on_submit=False):
             # Image Input field
             st.markdown(
                 "<h3 style='color: #3366cc;'><center>Upload an Image:</center></h3>", unsafe_allow_html=True)
@@ -141,17 +142,17 @@ def main():
                     predicted_label = lb.inverse_transform(prediction)[0]
                     confidence = prediction.max()
                     if confidence > 0.9:
-                        col1, col3 = st.columns(2)
+                        col2_1, col2_2 = st.columns(2)
                         # Display the results
-                        col1.markdown(
-                            "<p style='color: #3366cc;'>Given Image:</p>", unsafe_allow_html=True)
-                        col1.image(image, caption="Input Image",
-                                   use_column_width=False, width=200)
+                        col2_1.markdown(
+                            "<p style='color: #3366cc;'>Inout Image:</p>", unsafe_allow_html=True)
+                        col2_1.image(image, caption="",
+                                     use_column_width=True)
                         # The model predicts the character as:
-                        col3.markdown(
+                        col2_2.markdown(
                             f"<p style='color: green;'>Predicted District:</p>", unsafe_allow_html=True)
-                        col3.markdown(
-                            f"<span style='color: red;'>{predicted_label}</span>", unsafe_allow_html=True)
+                        col2_2.markdown(
+                            f"<span style='color: red;font-size: 3rem;'>{predicted_label}</span>", unsafe_allow_html=True)
                     else:
                         st.warning('Please Input Appropriate Image', icon="⚠️")
                 else:
