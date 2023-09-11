@@ -1,3 +1,10 @@
+.css-z5fcl4 {
+  width: 100%;
+  padding: 0rem 1rem 0rem;
+  min-width: auto;
+  max-width: initial;
+}
+
 /* Form properties */
 div.css-1xw8zd0.e10yg2by1 {
   position: relative;
@@ -54,6 +61,11 @@ div.css-6qob1r {
 
 div.css-1on073z.e1b2p2ww7 {
   color: #e2d9d5;
+}
+
+/* Sidebar Font */
+.css-q8sbsg p {
+  color: red;
 }
 
 /* Board */
