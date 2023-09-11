@@ -54,16 +54,19 @@ def main():
     # How to Use the System
     st.markdown("### How to Use the System:")
     st.markdown(
-        "- Upload an image of a hand-written Bengali district name. Or draw a Bengali district name on the whiteboard.")
+        "- Upload an image of a hand-written Bengali district name. Or, draw a Bengali district name on the whiteboard.")
     st.markdown(
         "- To adjust the drawing stroke width, you can find an option on the left sidebar.")
     st.markdown(
         "- Click the \"Predict\" button to get the district name prediction.")
     st.write("To help you understand the system better, we have provided some example images on the left.You can easily interact with the system by dragging and dropping these example images or by uploading your own hand-written district name image.")
 
+    # drawing stroke width
+    stroke_width = st.sidebar.slider("Stroke Width:", 1, 20, 2)
+
     # Add example images in the sidebar
     st.sidebar.markdown(
-        "<h3 style='color: #3366cc;'>Example Images:</h3>", unsafe_allow_html=True)
+        "<p style='color: red;'>Example Images:</p>", unsafe_allow_html=True)
     example_image_paths = [
         "figures/word_62_AH_19.jpg",
         "figures/word_6_AC_01.jpg",
@@ -74,9 +77,6 @@ def main():
         image = cv2.imread(image_path)
         st.sidebar.image(
             image, caption=f"Example {i+1}", use_column_width=False, width=150)
-
-    # drawing stroke width
-    stroke_width = st.sidebar.slider("Stroke width: ", 1, 20, 6)
 
     # input field
     col1, col2 = st.columns(2)
