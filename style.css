@@ -60,5 +60,9 @@ div.css-1on073z.e1b2p2ww7 {
 iframe {
   position: relative;
   border: 0px;
-  /* max-width: 300px; */
+  max-width: 300px;
+  /* height: 160px; */
+}
+div.css-1xw8zd0.e10yg2by1 {
+  text-align: center;
 }
