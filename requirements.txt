@@ -1,6 +1,6 @@
 numpy
 pickle-mixin
-streamlit
+streamlit==0.84.2
 streamlit_drawable_canvas
 streamlit-option-menu
 opencv-python
