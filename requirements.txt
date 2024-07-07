@@ -1,3 +1,4 @@
+clik>=8.0.0
 pip==24.1.1
 numpy==1.21.6
 pickle-mixin==1.0.2
