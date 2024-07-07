@@ -1,7 +1,7 @@
 numpy
-pickle-mixin==1.0.2
-streamlit
-streamlit-option-menu==0.3.2
+pickle-mixin
+streamlit==1.25.0
+streamlit-option-menu
 gunicorn
 flask
 opencv-python
