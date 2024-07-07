@@ -1,6 +1,4 @@
-clik>=8.0.0
-pip==24.1.1
-numpy==1.21.6
+numpy
 pickle-mixin==1.0.2
 streamlit
 streamlit-option-menu==0.3.2
